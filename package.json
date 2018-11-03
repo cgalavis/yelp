@@ -1,0 +1,33 @@
+{
+  "name": "@cgalavis/yelp",
+  "version": "1.0.22",
+  "description": "Library to access yelp.",
+  "main": "index.js",
+  "bin": {
+    "yelp": "./bin/query.js",
+    "yelp-import": "./bin/importer.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@crabel/util": "^1.0.30",
+    "@types/commander": "^2.12.2",
+    "@types/node": "^10.12.1",
+    "@types/pako": "^1.0.0",
+    "commander": "^2.19.0",
+    "geocoding": "^1.0.5",
+    "js-base64": "^2.4.9",
+    "multimeter": "^0.1.1",
+    "pako": "^1.0.6",
+    "terminal-kit": "^1.26.4",
+    "uuid": "^3.3.2",
+    "yelp-fusion": "^2.2.1"
+  },
+  "devDependencies": {
+    "@crabel/table": "^1.1.20",
+    "cli-progress": "^2.1.0"
+  }
+}
