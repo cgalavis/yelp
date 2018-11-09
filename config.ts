@@ -21,7 +21,7 @@ export const files = {
     location_map: path.join(config_dir, "location_map.json"),
     running_plan: path.join(config_dir, "running_plan.json"),
     yelp_data: path.join(config_dir, "yelp_data.json"),
-    compressed_yelp_data: path.join(config_dir, "yelp_data_compressed.json"),
+    compressed_yelp_data: path.join(config_dir, "yelp_data_compressed.bin"),
     categories: path.join(config_dir, "new_categories.json"),
 };
 

@@ -37,7 +37,7 @@ class YelpData {
         this.categories = new Set();
         this.data = data.filter(biz => {
             if (biz.categories)
-                biz.categories.forEach(c => this.categories.add(c.title));
+                biz.categories.forEach(c => this.categories.add(c));
             return !!biz.location && !!biz.coordinates;
         });
     }
@@ -85,7 +85,7 @@ class YelpData {
     static hasCategory(biz, cats) {
         for (let c of biz.categories) {
             for (let cat of cats)
-                if (c.title.toLowerCase().indexOf(cat.toLowerCase()) >= 0)
+                if (c.toLowerCase().indexOf(cat.toLowerCase()) >= 0)
                     return true;
         }
         return false;

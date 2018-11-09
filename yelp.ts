@@ -405,17 +405,29 @@ export class Yelp {
                     if (!added.has(i.id)) {
                         added.add(i.id);
 
-                        i.distance = Number(cacl.distance(i.coordinates).toFixed(2));
-                        res.push(i);
+                        //i.distance = Number(cacl.distance(i.coordinates).toFixed(2));
+                        res.push({
+                            id: i.id,
+                            name: i.name,
+                            url: i.url.split("?")[0],
+                            review_count: i.review_count,
+                            price: i.price,
+                            categories: extractCats(i.categories),
+                            rating: i.rating,
+                            coordinates: i.coordinates,
+                            location: {
+                                city: i.location.city,
+                                zip_code: i.location.zip_code
+                            },
+                            display_phone: i.display_phone
+                        });
                     }
                 });
             }
 
             pbar_stitch.percent(100, "                        ");
 
-            let compressed = Base64.encode(pako.deflate(JSON.stringify(res), { to: "string" }))
-                .match(/.{1,256}/g);
-
+            let compressed = pako.deflate(JSON.stringify(res));
             let tgt = (options.targetDir) ?
                 path.join(options.targetDir, path.basename(files.yelp_data)) :
                 files.yelp_data;
@@ -425,7 +437,7 @@ export class Yelp {
                 files.compressed_yelp_data;
 
             fs.writeFileSync(tgt, JSON.stringify(res, null, 2), "utf8");
-            fs.writeFileSync(tgt_comp, JSON.stringify(compressed), "utf8");
+            fs.writeFileSync(tgt_comp, compressed);
             console.log(`[+] Stitching process completed, data was saved to "${path.resolve(tgt)}".`);
 
             if (skipped.length)
@@ -435,6 +447,16 @@ export class Yelp {
         }
         finally {
             this.endProcess();
+        }
+
+
+        //
+
+        function extractCats(cats) {
+            let res = [];
+            cats.forEach(c => res.push(c.title));
+
+            return res;
         }
     }
 

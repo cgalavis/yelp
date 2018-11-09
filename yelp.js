@@ -19,7 +19,6 @@ const multimeter = require("multimeter");
 const table = require("@crabel/table");
 const CoordsCalc = require("./coords-calc");
 const pako = require("pako");
-const js_base64_1 = require("js-base64");
 //
 const yelp_api_key = "o0VLwk0bQ9Q0wgIl56wglRMVrxOHhky4TviCA8_O3q7CWwpwGYKWn2EF3gMgdQbReW3k7odKDFZ9n8fGR6e2G8ju5227YpVZoo_p5BAnxQJ4qZZsNB5u-S7ofojMW3Yx";
 const yelp_max_results = 1000;
@@ -264,14 +263,27 @@ class Yelp {
                 list.forEach(i => {
                     if (!added.has(i.id)) {
                         added.add(i.id);
-                        i.distance = Number(cacl.distance(i.coordinates).toFixed(2));
-                        res.push(i);
+                        //i.distance = Number(cacl.distance(i.coordinates).toFixed(2));
+                        res.push({
+                            id: i.id,
+                            name: i.name,
+                            url: i.url.split("?")[0],
+                            review_count: i.review_count,
+                            price: i.price,
+                            categories: extractCats(i.categories),
+                            rating: i.rating,
+                            coordinates: i.coordinates,
+                            location: {
+                                city: i.location.city,
+                                zip_code: i.location.zip_code
+                            },
+                            display_phone: i.display_phone
+                        });
                     }
                 });
             }
             pbar_stitch.percent(100, "                        ");
-            let compressed = js_base64_1.Base64.encode(pako.deflate(JSON.stringify(res), { to: "string" }))
-                .match(/.{1,256}/g);
+            let compressed = pako.deflate(JSON.stringify(res));
             let tgt = (options.targetDir) ?
                 path.join(options.targetDir, path.basename(config_1.files.yelp_data)) :
                 config_1.files.yelp_data;
@@ -279,7 +291,7 @@ class Yelp {
                 path.join(options.targetDir, path.basename(config_1.files.compressed_yelp_data)) :
                 config_1.files.compressed_yelp_data;
             fs.writeFileSync(tgt, JSON.stringify(res, null, 2), "utf8");
-            fs.writeFileSync(tgt_comp, JSON.stringify(compressed), "utf8");
+            fs.writeFileSync(tgt_comp, compressed);
             console.log(`[+] Stitching process completed, data was saved to "${path.resolve(tgt)}".`);
             if (skipped.length)
                 skipped.forEach(sf => {
@@ -288,6 +300,12 @@ class Yelp {
         }
         finally {
             this.endProcess();
+        }
+        //
+        function extractCats(cats) {
+            let res = [];
+            cats.forEach(c => res.push(c.title));
+            return res;
         }
     }
     //

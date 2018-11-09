@@ -45,7 +45,7 @@ export class YelpData {
         this.categories = new Set();
         this.data = data.filter(biz => {
             if (biz.categories)
-                biz.categories.forEach(c => this.categories.add(c.title));
+                biz.categories.forEach(c => this.categories.add(c));
 
             return !!biz.location && !!biz.coordinates;
 
@@ -104,7 +104,7 @@ export class YelpData {
     private static hasCategory(biz, cats: string | string[]) : boolean {
         for (let c of biz.categories) {
             for (let cat of cats)
-                if (c.title.toLowerCase().indexOf(cat.toLowerCase()) >= 0)
+                if (c.toLowerCase().indexOf(cat.toLowerCase()) >= 0)
                     return true;
         }
 
