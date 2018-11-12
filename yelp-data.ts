@@ -96,6 +96,8 @@ export class YelpData {
             }
         }
 
+        bs.forEach((b, i) => b._index = i);
+
         return bs;
     }
 
